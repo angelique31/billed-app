@@ -2,12 +2,14 @@
  * @jest-environment jsdom
  */
 
-import LoginUI from "../views/LoginUI";
-import Login from "../containers/Login.js";
-import { ROUTES } from "../constants/routes";
+import LoginUI from "../../views/LoginUI";
+import Login from "../../containers/Login.js";
+import { ROUTES } from "../../constants/routes";
 import { fireEvent, screen } from "@testing-library/dom";
 
+//Étant donné que je suis un utilisateur sur la page de connexion
 describe("Given that I am a user on login page", () => {
+  //Quand je ne remplis pas les champs et que je clique sur le bouton Employé Se connecter
   describe("When I do not fill fields and I click on employee button Login In", () => {
     test("Then It should renders Login page", () => {
       document.body.innerHTML = LoginUI();
@@ -26,7 +28,7 @@ describe("Given that I am a user on login page", () => {
       expect(screen.getByTestId("form-employee")).toBeTruthy();
     });
   });
-
+  //Lorsque je remplis des champs dans un format incorrect et que je clique sur le bouton Employé Se connecter
   describe("When I do fill fields in incorrect format and I click on employee button Login In", () => {
     test("Then It should renders Login page", () => {
       document.body.innerHTML = LoginUI();
@@ -48,7 +50,9 @@ describe("Given that I am a user on login page", () => {
     });
   });
 
+  //Lorsque je remplis les champs dans le bon format et que je clique sur le bouton de l'employé
   describe("When I do fill fields in correct format and I click on employee button Login In", () => {
+    //Ensuite, je devrais être identifié en tant qu'employé dans l'application
     test("Then I should be identified as an Employee in app", () => {
       document.body.innerHTML = LoginUI();
       const inputData = {
@@ -110,14 +114,15 @@ describe("Given that I am a user on login page", () => {
         })
       );
     });
-
+    //Il devrait afficher la page Factures
     test("It should renders Bills page", () => {
       expect(screen.getAllByText("Mes notes de frais")).toBeTruthy();
     });
   });
 });
-
+//Étant donné que je suis un utilisateur sur la page de connexion
 describe("Given that I am a user on login page", () => {
+  //Quand je ne remplis pas les champs et que je clique sur le bouton admin Se connecter
   describe("When I do not fill fields and I click on admin button Login In", () => {
     test("Then It should renders Login page", () => {
       document.body.innerHTML = LoginUI();
@@ -136,7 +141,7 @@ describe("Given that I am a user on login page", () => {
       expect(screen.getByTestId("form-admin")).toBeTruthy();
     });
   });
-
+  //Lorsque je remplis des champs dans un format incorrect et que je clique sur le bouton de connexion
   describe("When I do fill fields in incorrect format and I click on admin button Login In", () => {
     test("Then it should renders Login page", () => {
       document.body.innerHTML = LoginUI();
@@ -157,8 +162,9 @@ describe("Given that I am a user on login page", () => {
       expect(screen.getByTestId("form-admin")).toBeTruthy();
     });
   });
-
+  //Lorsque je remplis les champs dans le bon format et que je clique sur le bouton admin Se connecter
   describe("When I do fill fields in correct format and I click on admin button Login In", () => {
+    //Ensuite, je devrais être identifié en tant qu'administrateur RH dans l'application
     test("Then I should be identified as an HR admin in app", () => {
       document.body.innerHTML = LoginUI();
       const inputData = {
