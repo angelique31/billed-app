@@ -11,7 +11,8 @@ import { localStorageMock } from "../../__mocks__/localStorage.js";
 import router from "../../app/Router.js";
 
 //On décrit le contexte :
-describe("containers/Bills", () => {
+//mettre "containers/Bills" à la place de  "Given I am connected as an employee"
+describe("Given I am connected as an employee", () => {
   //On décrit l'action que l'on test :
   describe("When I am on Bills Page", () => {
     //Message indiquant le résultat attendu :
@@ -35,9 +36,10 @@ describe("containers/Bills", () => {
       window.onNavigate(ROUTES_PATH.Bills);
       await waitFor(() => screen.getByTestId("icon-window")); //attendre que l'élément ayant un id "icon-window" soit disponible avant de continuer.
       const windowIcon = screen.getByTestId("icon-window"); //stock l'élément récupéré dans une variable
-      console.log(windowIcon);
+      // console.log(windowIcon);
       //to-do write expect expression
       //vérifier si l'icône de la facture est mise en surbrillance :
+      expect(windowIcon.classList.contains("active-icon")).toBe(true);
     });
 
     //Ensuite, les factures doivent être commandées de la + récente à la + ancienne
