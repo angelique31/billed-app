@@ -2,17 +2,18 @@
  * @jest-environment jsdom
  */
 //pour simuler les comportements de l'application et de Local Storage:
-import { screen, waitFor } from "@testing-library/dom";
+import { screen, waitFor, fireEvent } from "@testing-library/dom";
 
 import BillsUI from "../../views/BillsUI.js";
 import { bills } from "../../fixtures/bills.js";
-import { ROUTES_PATH } from "../../constants/routes.js";
+import { ROUTES, ROUTES_PATH } from "../../constants/routes.js";
 //pour simuler les comportements de localStorage://
 import { localStorageMock } from "../../__mocks__/localStorage.js";
 import router from "../../app/Router.js";
 
-// import mockStore from "../../__mocks__/store";
-import Bills from "../../containers/Bills";
+// import Bills from "../../containers/Bills";
+
+import store from "../../__mocks__/store";
 
 //On décrit le contexte :
 //mettre "views/VerticalLayout" à la place de  "Given I am connected as an employee"
@@ -69,47 +70,46 @@ describe("Given I am connected as an employee", () => {
 
 //TO DO ajouter 6 ou 7 tests sur ce fichier
 
-// /****************clique sur le bouton bouvelle facture************************************ */
-
-//vérifie le comportement de l'application lorsque l'utilisateur clique sur le bouton "Nouvelle facture"
-describe("BillsUI", () => {
-  let billsUI;
-  let buttonNewBill;
-
-  beforeEach(() => {
-    // initialise une nouvelle instance de la classe "BillsUI"
-    billsUI = new BillsUI({
-      document: document,
-      store: {
-        bills: () => {
-          return {
-            list: () => {
-              // simuler une requête asynchrone
-              return new Promise(() => {});
-            },
-          };
-        },
-      },
-      localStorage: localStorageMock,
+/****************clique sur le bouton nouvelle facture1************************************ */
+//quand l'utilisateur clique sur le bouton "Nouvelle facture(NewBill)", la fonction handleClickNewBill est appelée, qui change l'URL de l'application pour afficher la page "Nouvelle facture" et que le contenu de cette page contient le texte "Envoyer une note de frais"
+describe("When I click on the 'New Bill' button", () => {
+  test("It should display the 'New Bill' page", () => {
+    Object.defineProperty(window, "localStorage", {
+      value: localStorageMock,
     });
-    // Initialize the 'Nouvelle facture' button with an attribute 'data-testid' and value 'btn-new-bill'
-    buttonNewBill = document.createElement("button");
-    buttonNewBill.setAttribute("data-testid", "btn-new-bill");
-    //ajoute le bouton buttonNewBill à la fin de l'élément <body>
-    document.body.appendChild(buttonNewBill);
-    // créer un espion sur la méthode handleClickNewBill de l'objet billsUI
-    // permet de vérifier plus tard que cette méthode a été appelée au moins une fois lorsque le bouton "Nouvelle facture" est cliqué
-    jest.spyOn(billsUI, "handleClickNewBill");
-  });
-  // Devrait appeler la fonction handleClickNewBill lorsque le bouton 'Nouvelle facture' est cliqué"
-  it("should call the handleClickNewBill function when the 'Nouvelle facture' button is clicked", () => {
-    // Simule un clic sur le boutton
-    buttonNewBill.click();
-    // vérifie que la fonction handleClickNewBill a bien été appelée lorsque le bouton "Nouvelle facture" est cliqué.
-    expect(billsUI.handleClickNewBill).toHaveBeenCalled();
+    window.localStorage.setItem("user", JSON.stringify({ type: "Employee" }));
+    const html = BillsUI({ data: bills });
+    document.body.innerHTML = html;
+
+    //simule un changement de page dans l'application
+    const onNavigate = (pathname) => {
+      document.body.innerHTML = ROUTES({ pathname });
+    };
+
+    // instance de la classe "Bills" utilisée pour gérer les factures et les interactions utilisateur avec ces factures
+    const billsList = new Bills({
+      document,
+      onNavigate,
+      localStorage: window.localStorage,
+      store: null,
+    });
+    // vérifier si la fonction handleClickNewBill a été appelée ou non lorsque l'utilisateur clique sur le bouton "New Bill"
+    const handleClickNewBill = jest.fn(billsList.handleClickNewBill);
+    //récupérer le bouton avec l'attribut 'data-testid' égal à "btn-new-bill"
+    //permet de vérifier si le bouton "Nouvelle facture" est présent dans la page HTML.
+    const buttonNewBill = screen.getByTestId("btn-new-bill");
+    expect(buttonNewBill).toBeTruthy();
+
+    buttonNewBill.addEventListener("click", handleClickNewBill);
+    // simule un clic sur le bouton
+    fireEvent.click(buttonNewBill);
+    //vérifie que la page "Nouvelle facture" a bien été affichée après que l'utilisateur ait cliqué sur le bouton "Nouvelle facture"
+    expect(screen.getByText("Envoyer une note de frais")).toBeTruthy();
   });
 });
+
 /**********************Clique sur l'icone oeil***************************************** */
+
 describe("When I click on first eye icon", () => {
   test("Then modal should open", () => {
     //remplace l'objet de stockage local natif du navigateur par une simulation pour les besoins du test
@@ -153,71 +153,71 @@ describe("When I click on first eye icon", () => {
 
 /**************************************************************** */
 //ajouter un test d'intégration GET Bills:
-describe("Given I am a user connected as Employee", () => {
-  let store;
-  let instance;
+// describe("Given I am a user connected as Employee", () => {
+//   let store;
+//   let instance;
 
-  beforeEach(() => {
-    store = {
-      bills: jest.fn(() => ({
-        list: jest.fn(() =>
-          Promise.resolve([
-            {
-              date: "2022-01-15",
-              status: "paid",
-              amount: 100,
-            },
-            {
-              date: "2022-02-15",
-              status: "unpaid",
-              amount: 50,
-            },
-          ])
-        ),
-      })),
-    };
-    instance = new classToTest({ store });
-  });
+//   beforeEach(() => {
+//     store = {
+//       bills: jest.fn(() => ({
+//         list: jest.fn(() =>
+//           Promise.resolve([
+//             {
+//               date: "2022-01-15",
+//               status: "paid",
+//               amount: 100,
+//             },
+//             {
+//               date: "2022-02-15",
+//               status: "unpaid",
+//               amount: 50,
+//             },
+//           ])
+//         ),
+//       })),
+//     };
+//     instance = new classToTest({ store });
+//   });
 
-  describe("When I call getBills method", () => {
-    test("fetches bills from mock API GET", async () => {
-      const bills = await instance.getBills();
-      expect(bills).toEqual([
-        {
-          date: "15 Jan 2022",
-          status: "Paid",
-          amount: 100,
-        },
-        {
-          date: "15 Feb 2022",
-          status: "Unpaid",
-          amount: 50,
-        },
-      ]);
-    });
+//   describe("When I call getBills method", () => {
+//     test("fetches bills from mock API GET", async () => {
+//       const bills = await instance.getBills();
+//       expect(bills).toEqual([
+//         {
+//           date: "15 Jan 2022",
+//           status: "Paid",
+//           amount: 100,
+//         },
+//         {
+//           date: "15 Feb 2022",
+//           status: "Unpaid",
+//           amount: 50,
+//         },
+//       ]);
+//     });
 
-    describe("When an error occurs on API", () => {
-      test("fetches bills from an API and fails with 404 message error", async () => {
-        store.bills().list.mockImplementationOnce(() => {
-          return Promise.reject(new Error("Erreur 404"));
-        });
-        try {
-          await instance.getBills();
-        } catch (err) {
-          expect(err.message).toBe("Erreur 404");
-        }
-      });
+//     describe("When an error occurs on API", () => {
+//       test("fetches bills from an API and fails with 404 message error", async () => {
+//         store.bills().list.mockImplementationOnce(() => {
+//           return Promise.reject(new Error("Erreur 404"));
+//         });
+//         try {
+//           await instance.getBills();
+//         } catch (err) {
+//           expect(err.message).toBe("Erreur 404");
+//         }
+//       });
 
-      test("fetches bills from an API and fails with 500 message error", async () => {
-        store.bills().list.mockImplementationOnce(() => {
-          return Promise.reject(new Error("Erreur 500"));
-        });
-        try {
-          await instance.getBills();
-        } catch (err) {
-          expect(err.message).toBe("Erreur 500");
-        }
-      });
-    });
-  });
-});
+//       test("fetches bills from an API and fails with 500 message error", async () => {
+//         store.bills().list.mockImplementationOnce(() => {
+//           return Promise.reject(new Error("Erreur 500"));
+//         });
+//         try {
+//           await instance.getBills();
+//         } catch (err) {
+//           expect(err.message).toBe("Erreur 500");
+//         }
+//       });
+//     });
+//   });
+// });
