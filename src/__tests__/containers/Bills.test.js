@@ -153,71 +153,73 @@ describe("When I click on first eye icon", () => {
 
 /**************************************************************** */
 //ajouter un test d'intégration GET Bills:
-// describe("Given I am a user connected as Employee", () => {
-//   let store;
-//   let instance;
+describe("Given I am a user connected as Employee", () => {
+  let store;
+  let instance;
+  // simule les appels à l'API et renvoie les données de factures attendues
+  beforeEach(() => {
+    store = {
+      bills: jest.fn(() => ({
+        list: jest.fn(() =>
+          Promise.resolve([
+            {
+              date: "2022-01-15",
+              status: "paid",
+              amount: 100,
+            },
+            {
+              date: "2022-02-15",
+              status: "unpaid",
+              amount: 50,
+            },
+          ])
+        ),
+      })),
+    };
+    instance = new classToTest({ store });
+  });
 
-//   beforeEach(() => {
-//     store = {
-//       bills: jest.fn(() => ({
-//         list: jest.fn(() =>
-//           Promise.resolve([
-//             {
-//               date: "2022-01-15",
-//               status: "paid",
-//               amount: 100,
-//             },
-//             {
-//               date: "2022-02-15",
-//               status: "unpaid",
-//               amount: 50,
-//             },
-//           ])
-//         ),
-//       })),
-//     };
-//     instance = new classToTest({ store });
-//   });
+  describe("When I call getBills method", () => {
+    // vérifie que les factures sont bien récupérées à partir de l'API de mock et qu'elles ont le format attendu
+    test("fetches bills from mock API GET", async () => {
+      const bills = await instance.getBills();
+      expect(bills).toEqual([
+        {
+          date: "15 Jan 2022",
+          status: "Paid",
+          amount: 100,
+        },
+        {
+          date: "15 Feb 2022",
+          status: "Unpaid",
+          amount: 50,
+        },
+      ]);
+    });
+    //vérifie les cas d'erreur
+    describe("When an error occurs on API", () => {
+      test("fetches bills from an API and fails with 404 message error", async () => {
+        // simuler des erreurs renvoyées par l'API  avec mockImplementationOnce()
+        store.bills().list.mockImplementationOnce(() => {
+          return Promise.reject(new Error("Erreur 404"));
+        });
+        try {
+          await instance.getBills();
+        } catch (err) {
+          expect(err.message).toBe("Erreur 404");
+        }
+      });
 
-//   describe("When I call getBills method", () => {
-//     test("fetches bills from mock API GET", async () => {
-//       const bills = await instance.getBills();
-//       expect(bills).toEqual([
-//         {
-//           date: "15 Jan 2022",
-//           status: "Paid",
-//           amount: 100,
-//         },
-//         {
-//           date: "15 Feb 2022",
-//           status: "Unpaid",
-//           amount: 50,
-//         },
-//       ]);
-//     });
-
-//     describe("When an error occurs on API", () => {
-//       test("fetches bills from an API and fails with 404 message error", async () => {
-//         store.bills().list.mockImplementationOnce(() => {
-//           return Promise.reject(new Error("Erreur 404"));
-//         });
-//         try {
-//           await instance.getBills();
-//         } catch (err) {
-//           expect(err.message).toBe("Erreur 404");
-//         }
-//       });
-
-//       test("fetches bills from an API and fails with 500 message error", async () => {
-//         store.bills().list.mockImplementationOnce(() => {
-//           return Promise.reject(new Error("Erreur 500"));
-//         });
-//         try {
-//           await instance.getBills();
-//         } catch (err) {
-//           expect(err.message).toBe("Erreur 500");
-//         }
-//       });
-//     });
-//   });
-// });
+      test("fetches bills from an API and fails with 500 message error", async () => {
+        store.bills().list.mockImplementationOnce(() => {
+          return Promise.reject(new Error("Erreur 500"));
+        });
+        try {
+          await instance.getBills();
+        } catch (err) {
+          expect(err.message).toBe("Erreur 500");
+        }
+      });
+    });
+  });
+});
