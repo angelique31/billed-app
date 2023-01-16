@@ -3,7 +3,9 @@ import ErrorPage from "./ErrorPage.js";
 import LoadingPage from "./LoadingPage.js";
 
 import Actions from "./Actions.js";
-
+//ce fichier est lié au 2e test Bills.test.js
+//code pour générer l'interface utilisateur de la page de factures de l'application.
+//La fonction row prend en entrée les données de factures et les trie par ordre de date décroissant.
 const row = (bill) => {
   return `
     <tr>
@@ -20,10 +22,6 @@ const row = (bill) => {
 };
 
 // bug trier les dates  : ajouter sort() pour trier de la date la plus récente à la date la plus ancienne.
-//fonction d'origine :
-// const rows = (data) => {
-//   return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
-// }
 //Fonction corrigée avec sort() :
 const rows = (data) => {
   // console.log(data);
