@@ -2924,6 +2924,11 @@
   dependencies:
     "detect-newline" "^3.0.0"
 
+"jest-dom@^4.0.0":
+  "integrity" "sha512-gBxYZlZB1Jgvf2gP2pRfjjUWF8woGBHj/g5rAQgFPB/0K2atGuhVcPO+BItyjWeKg9zM+dokgcMOH01vrWVMFA=="
+  "resolved" "https://registry.npmjs.org/jest-dom/-/jest-dom-4.0.0.tgz"
+  "version" "4.0.0"
+
 "jest-each@^26.1.0":
   "integrity" "sha512-lYiSo4Igr81q6QRsVQq9LIkJW0hZcKxkIkHzNeTMPENYYDw/W/Raq28iJ0sLlNFYz2qxxeLnc5K2gQoFYlu2bA=="
   "resolved" "https://registry.npmjs.org/jest-each/-/jest-each-26.1.0.tgz"
