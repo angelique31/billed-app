@@ -4,13 +4,14 @@
 
 import { screen, waitFor, fireEvent } from "@testing-library/dom";
 import "@testing-library/jest-dom";
+import userEvent from "@testing-library/user-event";
+
 import BillsUI from "../../views/BillsUI";
 import { bills } from "../../fixtures/bills";
 import { ROUTES, ROUTES_PATH } from "../../constants/routes";
 import { localStorageMock } from "../../__mocks__/localStorage";
 import mockStore from "../../__mocks__/store";
 import Bills from "../../containers/Bills";
-import userEvent from "@testing-library/user-event";
 import router from "../../app/Router";
 
 jest.mock("../../app/store", () => mockStore);
@@ -41,8 +42,6 @@ describe("views/VerticalLayout", () => {
       window.onNavigate(ROUTES_PATH.Bills);
       await waitFor(() => screen.getByTestId("icon-window")); //attendre que l'élément ayant un id "icon-window" soit disponible avant de continuer.
       const windowIcon = screen.getByTestId("icon-window"); //stock l'élément récupéré dans une variable
-      // console.log(windowIcon);
-      //to-do write expect expression
       //vérifier si l'icône de la facture est mise en surbrillance :
       expect(windowIcon.classList.contains("active-icon")).toBe(true);
     });
@@ -68,9 +67,7 @@ describe("views/VerticalLayout", () => {
   });
 });
 
-//TO DO ajouter 6 ou 7 tests sur ce fichier
-
-/****************clique sur le bouton nouvelle facture1************************************ */
+/****************clique sur le bouton nouvelle facture************************************ */
 //quand l'utilisateur clique sur le bouton "Nouvelle facture(NewBill)", la fonction handleClickNewBill est appelée, qui change l'URL de l'application pour afficher la page "Nouvelle facture" et que le contenu de cette page contient le texte "Envoyer une note de frais"
 describe("When I click on the 'New Bill' button", () => {
   test("It should display the 'New Bill' page", () => {
@@ -110,7 +107,7 @@ describe("When I click on the 'New Bill' button", () => {
 
 /**********************Clique sur l'icone oeil***************************************** */
 
-describe("When I click on first eye icon", () => {
+describe("When I click on an eye icon", () => {
   test("Then modal should open", async () => {
     //simule un changement de page dans l'application
     const onNavigate = (pathname) => {

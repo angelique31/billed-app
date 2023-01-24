@@ -16,7 +16,7 @@ export default class Bills {
     );
     // console.log(buttonNewBill);
     if (buttonNewBill)
-      //ajoute un écouteur d'événement "click" sur le bouton "Nouvelle facture":
+      //ajoute un écouteur d'événement "click" sur le bouton "Nouvelle note de frais":
       buttonNewBill.addEventListener("click", this.handleClickNewBill);
     const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`);
     if (iconEye)
@@ -76,7 +76,7 @@ export default class Bills {
                 };
               }
             });
-            console.log("length", bills.length);
+            // console.log("length", bills.length);
             // console.log(bills);
             //retourne un tableau contenant toutes les factures formatées
             return bills;

@@ -6,9 +6,11 @@ export default class NewBill {
     this.document = document;
     this.onNavigate = onNavigate;
     this.store = store;
+    //on pointe le formulaire "notes de frais"
     const formNewBill = this.document.querySelector(
       `form[data-testid="form-new-bill"]`
     );
+    // console.log(formNewBill);
     formNewBill.addEventListener("submit", this.handleSubmit);
     const file = this.document.querySelector(`input[data-testid="file"]`);
     // console.log(file);
@@ -63,7 +65,7 @@ export default class NewBill {
         },
       })
       .then(({ fileUrl, key }) => {
-        console.log(fileUrl);
+        // console.log(fileUrl);
         this.billId = key;
         this.fileUrl = fileUrl;
         this.fileName = fileName;
@@ -71,32 +73,42 @@ export default class NewBill {
       .catch((error) => console.error(error));
   };
 
+  //gérer l'événement de soumission du formulaire
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(
-      'e.target.querySelector(`input[data-testid="datepicker"]`).value',
-      e.target.querySelector(`input[data-testid="datepicker"]`).value
-    );
+    //champ de saisie pour la date
+    // console.log(
+    //   'e.target.querySelector(`input[data-testid="datepicker"]`).value',
+    //   e.target.querySelector(`input[data-testid="datepicker"]`).value
+    // );
+    //Récupérer l'adresse e-mail de l'utilisateur connecté
     const email = JSON.parse(localStorage.getItem("user")).email;
+    // objet "bill" qui contient les informations du formulaire
     const bill = {
       email,
       type: e.target.querySelector(`select[data-testid="expense-type"]`).value,
       name: e.target.querySelector(`input[data-testid="expense-name"]`).value,
+
       amount: parseInt(
+        //amount = Montant
         e.target.querySelector(`input[data-testid="amount"]`).value
       ),
       date: e.target.querySelector(`input[data-testid="datepicker"]`).value,
-      vat: e.target.querySelector(`input[data-testid="vat"]`).value,
+      vat: e.target.querySelector(`input[data-testid="vat"]`).value, //vat = tva
+      //pct = pourcentage (20%)
       pct:
         parseInt(e.target.querySelector(`input[data-testid="pct"]`).value) ||
         20,
       commentary: e.target.querySelector(`textarea[data-testid="commentary"]`)
         .value,
-      fileUrl: this.fileUrl,
-      fileName: this.fileName,
+
+      fileUrl: this.fileUrl, //fichier contenant l'URL
+      fileName: this.fileName, //contiens le nom du fichier téléchargé.
       status: "pending",
     };
+    //mettre à jour la facture avec les données du formulaire
     this.updateBill(bill);
+    //rediriger l'utilisateur vers une autre page, la page de liste des factures
     this.onNavigate(ROUTES_PATH["Bills"]);
   };
 
