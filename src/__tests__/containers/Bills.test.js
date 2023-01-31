@@ -67,8 +67,8 @@ describe("views/VerticalLayout", () => {
   });
 });
 
-/****************clique sur le bouton nouvelle facture************************************ */
-//quand l'utilisateur clique sur le bouton "Nouvelle facture(NewBill)", la fonction handleClickNewBill est appelée, qui change l'URL de l'application pour afficher la page "Nouvelle facture" et que le contenu de cette page contient le texte "Envoyer une note de frais"
+/****************clique sur le bouton "nouvelle note de frais"************************************ */
+//quand l'utilisateur clique sur le bouton "Nouvelle note de frais(NewBill)", la fonction handleClickNewBill est appelée, qui change l'URL de l'application pour afficher la page "Nouvelle facture" et que le contenu de cette page contient le texte "Envoyer une note de frais"
 describe("When I click on the 'New Bill' button", () => {
   test("It should display the 'New Bill' page", () => {
     Object.defineProperty(window, "localStorage", {
@@ -108,7 +108,7 @@ describe("When I click on the 'New Bill' button", () => {
 /**********************Clique sur l'icone oeil***************************************** */
 
 describe("When I click on an eye icon", () => {
-  test("Then modal should open", async () => {
+  test("Then modal should open", () => {
     //simule un changement de page dans l'application
     const onNavigate = (pathname) => {
       document.body.innerHTML = ROUTES({ pathname });

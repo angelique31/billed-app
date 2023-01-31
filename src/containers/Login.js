@@ -15,15 +15,18 @@ export default class Login {
     this.onNavigate = onNavigate;
     this.PREVIOUS_LOCATION = PREVIOUS_LOCATION;
     this.store = store;
+    //formulaire de connexion employé
     const formEmployee = this.document.querySelector(
       `form[data-testid="form-employee"]`
     );
     formEmployee.addEventListener("submit", this.handleSubmitEmployee);
+    //formulaire de connexion admin
     const formAdmin = this.document.querySelector(
       `form[data-testid="form-admin"]`
     );
     formAdmin.addEventListener("submit", this.handleSubmitAdmin);
   }
+
   handleSubmitEmployee = (e) => {
     e.preventDefault();
     const user = {
@@ -50,8 +53,11 @@ export default class Login {
     e.preventDefault();
     const user = {
       type: "Admin",
-      // email: e.target.querySelector(`input[data-testid="employee-email-input"]`).value,
-      // password: e.target.querySelector(`input[data-testid="employee-password-input"]`).value,
+      // email: e.target.querySelector(`input[data-testid="employee-email-input"]`)
+      //   .value,
+      // password: e.target.querySelector(
+      //   `input[data-testid="employee-password-input"]`
+      // ).value,
       email: e.target.querySelector(`input[data-testid="admin-email-input"]`)
         .value,
       password: e.target.querySelector(
@@ -90,6 +96,7 @@ export default class Login {
   };
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   createUser = (user) => {
     if (this.store) {
       return this.store

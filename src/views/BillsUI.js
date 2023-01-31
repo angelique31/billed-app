@@ -21,7 +21,6 @@ const row = (bill) => {
     `;
 };
 
-// bug trier les dates  : ajouter sort() pour trier de la date la plus récente à la date la plus ancienne.
 //Fonction corrigée avec sort() :
 const rows = (data) => {
   // console.log(data);
