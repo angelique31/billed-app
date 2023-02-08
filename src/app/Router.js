@@ -9,8 +9,6 @@ import DashboardUI from "../views/DashboardUI.js";
 
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
 
-//fonction qui gère la navigation entre les différentes routes de l'application, en utilisant l'objet window.location pour déterminer la route actuelle
-//en utilisant l'objet localStorage pour stocker et récupérer des données
 export default () => {
   const rootDiv = document.getElementById("root");
   rootDiv.innerHTML = ROUTES({ pathname: window.location.pathname });
